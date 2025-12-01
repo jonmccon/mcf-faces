@@ -1,4 +1,42 @@
 {
-  "faces": [],
-  "photos": []
+  "faces": [
+    {
+      "face_id": "test_family_2020-06-15_face0",
+      "photo": "test_family_2020-06-15.jpg",
+      "person_cluster": 0,
+      "name": "Alice Johnson",
+      "bbox": [
+        100,
+        200,
+        200,
+        100
+      ],
+      "date": "2020-06-15",
+      "thumbnail": "test_family_2020-06-15_face0.jpg"
+    },
+    {
+      "face_id": "test_family_2020-06-15_face1",
+      "photo": "test_family_2020-06-15.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        100,
+        450,
+        200,
+        350
+      ],
+      "date": "2020-06-15",
+      "thumbnail": "test_family_2020-06-15_face1.jpg"
+    }
+  ],
+  "photos": [
+    {
+      "file": "test_family_2020-06-15.jpg",
+      "date": "2020-06-15",
+      "faces": [
+        "test_family_2020-06-15_face0",
+        "test_family_2020-06-15_face1"
+      ]
+    }
+  ]
 }

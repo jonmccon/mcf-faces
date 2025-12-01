@@ -1,2 +1,18 @@
 {
+  "Alice Johnson": {
+    "parents": [
+      "John Johnson",
+      "Mary Johnson"
+    ],
+    "children": [],
+    "spouse": "Bob Smith"
+  },
+  "Bob Smith": {
+    "parents": [
+      "James Smith",
+      "Jane Smith"
+    ],
+    "children": [],
+    "spouse": "Alice Johnson"
+  }
 }

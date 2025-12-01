@@ -25,6 +25,7 @@ venv/
 # Node
 node_modules/
 web/dist/
+web/package-lock.json
 .npm
 *.log
 npm-debug.log*
