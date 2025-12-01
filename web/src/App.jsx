@@ -6,14 +6,18 @@ import PeopleView from './components/PeopleView';
 import ClustersView from './components/ClustersView';
 import TimelineView from './components/TimelineView';
 import FamilyTreeView from './components/FamilyTreeView';
+import GalleryView from './components/GalleryView';
+import PersonGalleryView from './components/PersonGalleryView';
+import MemoriesView from './components/MemoriesView';
 import FaceModal from './components/FaceModal';
 import PhotoModal from './components/PhotoModal';
 
 function App() {
-  const [view, setView] = useState('faces');
+  const [view, setView] = useState('gallery');
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAdmin, setShowAdmin] = useState(false);
   
   // Modal state
   const [selectedFace, setSelectedFace] = useState(null);
@@ -58,6 +62,14 @@ function App() {
 
   const renderView = () => {
     switch (view) {
+      // Public gallery views
+      case 'gallery':
+        return <GalleryView onFaceClick={handleFaceClick} onPhotoClick={handlePhotoClick} />;
+      case 'person-gallery':
+        return <PersonGalleryView onFaceClick={handleFaceClick} onPhotoClick={handlePhotoClick} />;
+      case 'memories':
+        return <MemoriesView onFaceClick={handleFaceClick} onPhotoClick={handlePhotoClick} />;
+      // Admin views
       case 'faces':
         return <FacesView onFaceClick={handleFaceClick} onPhotoClick={handlePhotoClick} />;
       case 'photos':
@@ -71,7 +83,7 @@ function App() {
       case 'family':
         return <FamilyTreeView onDataChange={handleDataChange} />;
       default:
-        return <FacesView onFaceClick={handleFaceClick} onPhotoClick={handlePhotoClick} />;
+        return <GalleryView onFaceClick={handleFaceClick} onPhotoClick={handlePhotoClick} />;
     }
   };
 
@@ -88,8 +100,44 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>Family Photos Face Recognition</h1>
+        <h1>Family Photos</h1>
         <nav className="nav">
+          {/* Public Gallery Views */}
+          <div className="nav-group">
+            <button 
+              className={`nav-btn nav-btn-primary ${view === 'gallery' ? 'active' : ''}`}
+              onClick={() => setView('gallery')}
+            >
+              📷 Gallery
+            </button>
+            <button 
+              className={`nav-btn nav-btn-primary ${view === 'person-gallery' ? 'active' : ''}`}
+              onClick={() => setView('person-gallery')}
+            >
+              👤 People
+            </button>
+            <button 
+              className={`nav-btn nav-btn-primary ${view === 'memories' ? 'active' : ''}`}
+              onClick={() => setView('memories')}
+            >
+              📅 Memories
+            </button>
+          </div>
+          
+          {/* Admin Toggle */}
+          <button 
+            className={`nav-btn nav-btn-admin ${showAdmin ? 'active' : ''}`}
+            onClick={() => setShowAdmin(!showAdmin)}
+          >
+            ⚙️ Admin
+          </button>
+        </nav>
+      </header>
+
+      {/* Admin Navigation */}
+      {showAdmin && (
+        <div className="admin-nav">
+          <span className="admin-label">Admin Tools:</span>
           <button 
             className={`nav-btn ${view === 'faces' ? 'active' : ''}`}
             onClick={() => setView('faces')}
@@ -106,7 +154,7 @@ function App() {
             className={`nav-btn ${view === 'people' ? 'active' : ''}`}
             onClick={() => setView('people')}
           >
-            People
+            People List
           </button>
           <button 
             className={`nav-btn ${view === 'clusters' ? 'active' : ''}`}
@@ -126,8 +174,8 @@ function App() {
           >
             Family Tree
           </button>
-        </nav>
-      </header>
+        </div>
+      )}
 
       {error && (
         <div className="error">
@@ -135,7 +183,8 @@ function App() {
         </div>
       )}
 
-      {stats && (
+      {/* Only show stats in admin mode */}
+      {showAdmin && stats && (
         <div className="stats-grid">
           <div className="stat-card">
             <h3>Photos</h3>
