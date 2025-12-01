@@ -20,7 +20,7 @@ def get_exif_date(image_path: Path) -> Optional[str]:
     """
     try:
         with Image.open(image_path) as img:
-            exif_data = img._getexif()
+            exif_data = img.getexif()
             
             if exif_data is None:
                 return None
@@ -170,7 +170,7 @@ def get_all_exif_data(image_path: Path) -> dict:
     """
     try:
         with Image.open(image_path) as img:
-            exif_data = img._getexif()
+            exif_data = img.getexif()
             
             if exif_data is None:
                 return {}

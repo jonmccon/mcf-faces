@@ -2,7 +2,6 @@
 Face detection and cropping module using face_recognition library.
 """
 
-import os
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
