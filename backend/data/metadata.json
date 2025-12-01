@@ -1,41 +1,368 @@
 {
   "faces": [
     {
-      "face_id": "test_family_2020-06-15_face0",
-      "photo": "test_family_2020-06-15.jpg",
+      "face_id": "family_vacation_1995_face0",
+      "photo": "family_vacation_1995.jpg",
       "person_cluster": 0,
       "name": "Alice Johnson",
       "bbox": [
         100,
         200,
         200,
-        100
+        80
       ],
-      "date": "2020-06-15",
-      "thumbnail": "test_family_2020-06-15_face0.jpg"
+      "date": "1995-07-20",
+      "thumbnail": "family_vacation_1995_face0.jpg"
     },
     {
-      "face_id": "test_family_2020-06-15_face1",
-      "photo": "test_family_2020-06-15.jpg",
+      "face_id": "family_vacation_1995_face1",
+      "photo": "family_vacation_1995.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        250,
+        370,
+        200,
+        250
+      ],
+      "date": "1995-07-20",
+      "thumbnail": "family_vacation_1995_face1.jpg"
+    },
+    {
+      "face_id": "family_vacation_1995_face2",
+      "photo": "family_vacation_1995.jpg",
+      "person_cluster": 3,
+      "name": "Grandma Rose",
+      "bbox": [
+        420,
+        540,
+        200,
+        420
+      ],
+      "date": "1995-07-20",
+      "thumbnail": "family_vacation_1995_face2.jpg"
+    },
+    {
+      "face_id": "christmas_2000_face0",
+      "photo": "christmas_2000.jpg",
+      "person_cluster": 0,
+      "name": "Alice Johnson",
+      "bbox": [
+        100,
+        200,
+        200,
+        80
+      ],
+      "date": "2000-12-25",
+      "thumbnail": "christmas_2000_face0.jpg"
+    },
+    {
+      "face_id": "christmas_2000_face1",
+      "photo": "christmas_2000.jpg",
+      "person_cluster": 2,
+      "name": "Emma Johnson",
+      "bbox": [
+        250,
+        370,
+        200,
+        250
+      ],
+      "date": "2000-12-25",
+      "thumbnail": "christmas_2000_face1.jpg"
+    },
+    {
+      "face_id": "christmas_2000_face2",
+      "photo": "christmas_2000.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        420,
+        540,
+        200,
+        420
+      ],
+      "date": "2000-12-25",
+      "thumbnail": "christmas_2000_face2.jpg"
+    },
+    {
+      "face_id": "birthday_2005_face0",
+      "photo": "birthday_2005.jpg",
+      "person_cluster": 2,
+      "name": "Emma Johnson",
+      "bbox": [
+        100,
+        200,
+        200,
+        80
+      ],
+      "date": "2005-03-15",
+      "thumbnail": "birthday_2005_face0.jpg"
+    },
+    {
+      "face_id": "birthday_2005_face1",
+      "photo": "birthday_2005.jpg",
+      "person_cluster": 3,
+      "name": "Grandma Rose",
+      "bbox": [
+        250,
+        370,
+        200,
+        250
+      ],
+      "date": "2005-03-15",
+      "thumbnail": "birthday_2005_face1.jpg"
+    },
+    {
+      "face_id": "reunion_2010_face0",
+      "photo": "reunion_2010.jpg",
+      "person_cluster": 0,
+      "name": "Alice Johnson",
+      "bbox": [
+        100,
+        200,
+        200,
+        80
+      ],
+      "date": "2010-08-10",
+      "thumbnail": "reunion_2010_face0.jpg"
+    },
+    {
+      "face_id": "reunion_2010_face1",
+      "photo": "reunion_2010.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        250,
+        370,
+        200,
+        250
+      ],
+      "date": "2010-08-10",
+      "thumbnail": "reunion_2010_face1.jpg"
+    },
+    {
+      "face_id": "reunion_2010_face2",
+      "photo": "reunion_2010.jpg",
+      "person_cluster": 2,
+      "name": "Emma Johnson",
+      "bbox": [
+        420,
+        540,
+        200,
+        420
+      ],
+      "date": "2010-08-10",
+      "thumbnail": "reunion_2010_face2.jpg"
+    },
+    {
+      "face_id": "graduation_2015_face0",
+      "photo": "graduation_2015.jpg",
+      "person_cluster": 2,
+      "name": "Emma Johnson",
+      "bbox": [
+        100,
+        200,
+        200,
+        80
+      ],
+      "date": "2015-05-22",
+      "thumbnail": "graduation_2015_face0.jpg"
+    },
+    {
+      "face_id": "graduation_2015_face1",
+      "photo": "graduation_2015.jpg",
+      "person_cluster": 0,
+      "name": "Alice Johnson",
+      "bbox": [
+        250,
+        370,
+        200,
+        250
+      ],
+      "date": "2015-05-22",
+      "thumbnail": "graduation_2015_face1.jpg"
+    },
+    {
+      "face_id": "wedding_2018_face0",
+      "photo": "wedding_2018.jpg",
+      "person_cluster": 0,
+      "name": "Alice Johnson",
+      "bbox": [
+        100,
+        200,
+        200,
+        80
+      ],
+      "date": "2018-06-15",
+      "thumbnail": "wedding_2018_face0.jpg"
+    },
+    {
+      "face_id": "wedding_2018_face1",
+      "photo": "wedding_2018.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        250,
+        370,
+        200,
+        250
+      ],
+      "date": "2018-06-15",
+      "thumbnail": "wedding_2018_face1.jpg"
+    },
+    {
+      "face_id": "wedding_2018_face2",
+      "photo": "wedding_2018.jpg",
+      "person_cluster": 2,
+      "name": "Emma Johnson",
+      "bbox": [
+        420,
+        540,
+        200,
+        420
+      ],
+      "date": "2018-06-15",
+      "thumbnail": "wedding_2018_face2.jpg"
+    },
+    {
+      "face_id": "holiday_2020_face0",
+      "photo": "holiday_2020.jpg",
       "person_cluster": 1,
       "name": "Bob Smith",
       "bbox": [
         100,
-        450,
         200,
-        350
+        200,
+        80
       ],
-      "date": "2020-06-15",
-      "thumbnail": "test_family_2020-06-15_face1.jpg"
+      "date": "2020-12-20",
+      "thumbnail": "holiday_2020_face0.jpg"
+    },
+    {
+      "face_id": "holiday_2020_face1",
+      "photo": "holiday_2020.jpg",
+      "person_cluster": 2,
+      "name": "Emma Johnson",
+      "bbox": [
+        250,
+        370,
+        200,
+        250
+      ],
+      "date": "2020-12-20",
+      "thumbnail": "holiday_2020_face1.jpg"
+    },
+    {
+      "face_id": "summer_2023_face0",
+      "photo": "summer_2023.jpg",
+      "person_cluster": 0,
+      "name": "Alice Johnson",
+      "bbox": [
+        100,
+        200,
+        200,
+        80
+      ],
+      "date": "2023-07-04",
+      "thumbnail": "summer_2023_face0.jpg"
+    },
+    {
+      "face_id": "summer_2023_face1",
+      "photo": "summer_2023.jpg",
+      "person_cluster": 2,
+      "name": "Emma Johnson",
+      "bbox": [
+        250,
+        370,
+        200,
+        250
+      ],
+      "date": "2023-07-04",
+      "thumbnail": "summer_2023_face1.jpg"
+    },
+    {
+      "face_id": "summer_2023_face2",
+      "photo": "summer_2023.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        420,
+        540,
+        200,
+        420
+      ],
+      "date": "2023-07-04",
+      "thumbnail": "summer_2023_face2.jpg"
     }
   ],
   "photos": [
     {
-      "file": "test_family_2020-06-15.jpg",
-      "date": "2020-06-15",
+      "file": "family_vacation_1995.jpg",
+      "date": "1995-07-20",
       "faces": [
-        "test_family_2020-06-15_face0",
-        "test_family_2020-06-15_face1"
+        "family_vacation_1995_face0",
+        "family_vacation_1995_face1",
+        "family_vacation_1995_face2"
+      ]
+    },
+    {
+      "file": "christmas_2000.jpg",
+      "date": "2000-12-25",
+      "faces": [
+        "christmas_2000_face0",
+        "christmas_2000_face1",
+        "christmas_2000_face2"
+      ]
+    },
+    {
+      "file": "birthday_2005.jpg",
+      "date": "2005-03-15",
+      "faces": [
+        "birthday_2005_face0",
+        "birthday_2005_face1"
+      ]
+    },
+    {
+      "file": "reunion_2010.jpg",
+      "date": "2010-08-10",
+      "faces": [
+        "reunion_2010_face0",
+        "reunion_2010_face1",
+        "reunion_2010_face2"
+      ]
+    },
+    {
+      "file": "graduation_2015.jpg",
+      "date": "2015-05-22",
+      "faces": [
+        "graduation_2015_face0",
+        "graduation_2015_face1"
+      ]
+    },
+    {
+      "file": "wedding_2018.jpg",
+      "date": "2018-06-15",
+      "faces": [
+        "wedding_2018_face0",
+        "wedding_2018_face1",
+        "wedding_2018_face2"
+      ]
+    },
+    {
+      "file": "holiday_2020.jpg",
+      "date": "2020-12-20",
+      "faces": [
+        "holiday_2020_face0",
+        "holiday_2020_face1"
+      ]
+    },
+    {
+      "file": "summer_2023.jpg",
+      "date": "2023-07-04",
+      "faces": [
+        "summer_2023_face0",
+        "summer_2023_face1",
+        "summer_2023_face2"
       ]
     }
   ]

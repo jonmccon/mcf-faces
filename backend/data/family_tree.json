@@ -4,7 +4,9 @@
       "John Johnson",
       "Mary Johnson"
     ],
-    "children": [],
+    "children": [
+      "Emma Johnson"
+    ],
     "spouse": "Bob Smith"
   },
   "Bob Smith": {
@@ -12,7 +14,24 @@
       "James Smith",
       "Jane Smith"
     ],
-    "children": [],
+    "children": [
+      "Emma Johnson"
+    ],
     "spouse": "Alice Johnson"
+  },
+  "Emma Johnson": {
+    "parents": [
+      "Alice Johnson",
+      "Bob Smith"
+    ],
+    "children": [],
+    "spouse": ""
+  },
+  "Grandma Rose": {
+    "parents": [],
+    "children": [
+      "Mary Johnson"
+    ],
+    "spouse": ""
   }
 }
