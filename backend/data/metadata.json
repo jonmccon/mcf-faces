@@ -293,6 +293,160 @@
       ],
       "date": "2023-07-04",
       "thumbnail": "summer_2023_face2.jpg"
+    },
+    {
+      "face_id": "PXL_20250823_160655707.MP_face0",
+      "photo": "PXL_20250823_160655707.MP.jpg",
+      "person_cluster": 0,
+      "name": "Alice Johnson",
+      "bbox": [
+        973,
+        1096,
+        1528,
+        541
+      ],
+      "date": "2025-08-23",
+      "thumbnail": "PXL_20250823_160655707.MP_face0.jpg"
+    },
+    {
+      "face_id": "PXL_20250906_213207939_face0",
+      "photo": "PXL_20250906_213207939.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        298,
+        1682,
+        1256,
+        723
+      ],
+      "date": "2025-09-06",
+      "thumbnail": "PXL_20250906_213207939_face0.jpg"
+    },
+    {
+      "face_id": "PXL_20250907_021432745.MP_face0",
+      "photo": "PXL_20250907_021432745.MP.jpg",
+      "person_cluster": -1,
+      "name": "",
+      "bbox": [
+        724,
+        1788,
+        1682,
+        830
+      ],
+      "date": "2025-09-06",
+      "thumbnail": "PXL_20250907_021432745.MP_face0.jpg"
+    },
+    {
+      "face_id": "PXL_20250915_210610526_face0",
+      "photo": "PXL_20250915_210610526.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        1845,
+        1668,
+        2644,
+        869
+      ],
+      "date": "2025-09-15",
+      "thumbnail": "PXL_20250915_210610526_face0.jpg"
+    },
+    {
+      "face_id": "PXL_20250916_003717013_face0",
+      "photo": "PXL_20250916_003717013.jpg",
+      "person_cluster": 1,
+      "name": "Bob Smith",
+      "bbox": [
+        846,
+        1873,
+        1232,
+        1488
+      ],
+      "date": "2025-09-15",
+      "thumbnail": "PXL_20250916_003717013_face0.jpg"
+    },
+    {
+      "face_id": "PXL_20250927_204854518.MP_face0",
+      "photo": "PXL_20250927_204854518.MP.jpg",
+      "person_cluster": -1,
+      "name": "",
+      "bbox": [
+        1651,
+        4116,
+        2206,
+        3561
+      ],
+      "date": "2025-09-27",
+      "thumbnail": "PXL_20250927_204854518.MP_face0.jpg"
+    },
+    {
+      "face_id": "PXL_20250927_204854518.MP_face1",
+      "photo": "PXL_20250927_204854518.MP.jpg",
+      "person_cluster": -1,
+      "name": "",
+      "bbox": [
+        634,
+        1917,
+        955,
+        1596
+      ],
+      "date": "2025-09-27",
+      "thumbnail": "PXL_20250927_204854518.MP_face1.jpg"
+    },
+    {
+      "face_id": "PXL_20250927_204854518.MP_face2",
+      "photo": "PXL_20250927_204854518.MP.jpg",
+      "person_cluster": -1,
+      "name": "",
+      "bbox": [
+        846,
+        2643,
+        1232,
+        2258
+      ],
+      "date": "2025-09-27",
+      "thumbnail": "PXL_20250927_204854518.MP_face2.jpg"
+    },
+    {
+      "face_id": "PXL_20251003_142446716_face0",
+      "photo": "PXL_20251003_142446716.jpg",
+      "person_cluster": -1,
+      "name": "",
+      "bbox": [
+        830,
+        3024,
+        1789,
+        2214
+      ],
+      "date": "2025-10-03",
+      "thumbnail": "PXL_20251003_142446716_face0.jpg"
+    },
+    {
+      "face_id": "PXL_20251027_025508026_face0",
+      "photo": "PXL_20251027_025508026.jpg",
+      "person_cluster": -1,
+      "name": "",
+      "bbox": [
+        620,
+        3472,
+        2607,
+        1944
+      ],
+      "date": "2025-10-26",
+      "thumbnail": "PXL_20251027_025508026_face0.jpg"
+    },
+    {
+      "face_id": "PXL_20251103_040350571.PORTRAIT_face0",
+      "photo": "PXL_20251103_040350571.PORTRAIT.jpg",
+      "person_cluster": 0,
+      "name": "Alice Johnson",
+      "bbox": [
+        1503,
+        2827,
+        3490,
+        840
+      ],
+      "date": "2025-11-02",
+      "thumbnail": "PXL_20251103_040350571.PORTRAIT_face0.jpg"
     }
   ],
   "photos": [
@@ -363,6 +517,76 @@
         "summer_2023_face0",
         "summer_2023_face1",
         "summer_2023_face2"
+      ]
+    },
+    {
+      "file": "PXL_20250823_160655707.MP.jpg",
+      "date": "2025-08-23",
+      "faces": [
+        "PXL_20250823_160655707.MP_face0"
+      ]
+    },
+    {
+      "file": "PXL_20250906_213207939.jpg",
+      "date": "2025-09-06",
+      "faces": [
+        "PXL_20250906_213207939_face0"
+      ]
+    },
+    {
+      "file": "PXL_20250907_021432745.MP.jpg",
+      "date": "2025-09-06",
+      "faces": [
+        "PXL_20250907_021432745.MP_face0"
+      ]
+    },
+    {
+      "file": "PXL_20250915_210610526.jpg",
+      "date": "2025-09-15",
+      "faces": [
+        "PXL_20250915_210610526_face0"
+      ]
+    },
+    {
+      "file": "PXL_20250916_003717013.jpg",
+      "date": "2025-09-15",
+      "faces": [
+        "PXL_20250916_003717013_face0"
+      ]
+    },
+    {
+      "file": "PXL_20250927_204854518.MP.jpg",
+      "date": "2025-09-27",
+      "faces": [
+        "PXL_20250927_204854518.MP_face0",
+        "PXL_20250927_204854518.MP_face1",
+        "PXL_20250927_204854518.MP_face2"
+      ]
+    },
+    {
+      "file": "PXL_20251003_142446716.jpg",
+      "date": "2025-10-03",
+      "faces": [
+        "PXL_20251003_142446716_face0"
+      ]
+    },
+    {
+      "file": "PXL_20251027_025508026.jpg",
+      "date": "2025-10-26",
+      "faces": [
+        "PXL_20251027_025508026_face0"
+      ]
+    },
+    {
+      "file": "PXL_20251101_060907732.jpg",
+      "date": "2025-10-31",
+      "faces": []
+    },
+    {
+      "file": "PXL_20251103_040350571.PORTRAIT.jpg",
+      "date": "2025-11-02",
+      "faces": [
+        "PXL_20251103_040350571.PORTRAIT_face0"
       ]
     }
   ]
