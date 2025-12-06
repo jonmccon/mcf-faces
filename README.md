@@ -62,6 +62,7 @@ family-photos-face-recognition/
 
 ### Backend Setup
 
+** don't use a venv on a devcontainer **
 1. Create a virtual environment:
    ```bash
    python -m venv venv
@@ -72,6 +73,9 @@ family-photos-face-recognition/
    ```bash
    pip install opencv-python face_recognition numpy scikit-learn pillow fastapi uvicorn python-multipart
    ```
+   use `opencv-python-headless` for devcontainers / codespaces
+
+   may also need to install `git+https://github.com/ageitgey/face_recognition_models`
 
    Note: `face_recognition` requires `dlib`, which may need CMake and a C++ compiler to build.
 
