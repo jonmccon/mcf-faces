@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .photo-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .photo-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-info {
+            padding: 16px;
+        }
+
+        .photo-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .photo-people {
+            font-size: 0.85rem;
+            color: #667eea;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .person-tag {
+            background: #e8eaf6;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #999;
+        }
+
+        .empty-state h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Modal for full-size image */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #ddd;
+        }
+
+        .stats {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📸 Family Photo Gallery</h1>
+            <p>A collection of our cherished memories</p>
+        </header>
+
+        <div id="stats" class="stats" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-photos">0</div>
+                    <div class="stat-label">Photos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-people">0</div>
+                    <div class="stat-label">People</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading photos...</p>
+        </div>
+
+        <div id="error" class="error" style="display: none;"></div>
+
+        <div id="gallery" class="gallery"></div>
+
+        <div id="empty" class="empty-state" style="display: none;">
+            <h2>No photos yet</h2>
+            <p>Photos will appear here once they are added to the system.</p>
+        </div>
+    </div>
+
+    <!-- Modal for full-size image -->
+    <div id="modal" class="modal">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <img id="modal-image" class="modal-content" alt="Full size photo">
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+
+        // Fetch photos from the API
+        async function loadGallery() {
+            try {
+                // Fetch photos with face details
+                const response = await fetch(`${API_BASE}/photos?limit=100`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // Fetch detailed info for each photo (including faces)
+                const photoPromises = data.photos.map(async (photo) => {
+                    try {
+                        const detailResponse = await fetch(`${API_BASE}/photos/${encodeURIComponent(photo.file)}`);
+                        if (detailResponse.ok) {
+                            return await detailResponse.json();
+                        }
+                        return photo;
+                    } catch (err) {
+                        console.error('Error fetching photo details:', err);
+                        return photo;
+                    }
+                });
+
+                const photos = await Promise.all(photoPromises);
+
+                // Hide loading indicator
+                document.getElementById('loading').style.display = 'none';
+
+                if (photos.length === 0) {
+                    document.getElementById('empty').style.display = 'block';
+                    return;
+                }
+
+                // Display stats
+                const uniquePeople = new Set();
+                photos.forEach(photo => {
+                    if (photo.face_details) {
+                        photo.face_details.forEach(face => {
+                            if (face.name) uniquePeople.add(face.name);
+                        });
+                    }
+                });
+
+                document.getElementById('stat-photos').textContent = photos.length;
+                document.getElementById('stat-people').textContent = uniquePeople.size;
+                document.getElementById('stats').style.display = 'block';
+
+                // Render gallery
+                const gallery = document.getElementById('gallery');
+                photos.forEach(photo => {
+                    const card = createPhotoCard(photo);
+                    gallery.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+                document.getElementById('loading').style.display = 'none';
+                const errorEl = document.getElementById('error');
+                errorEl.textContent = `Failed to load photos: ${error.message}`;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // Create a photo card element
+        function createPhotoCard(photo) {
+            const card = document.createElement('div');
+            card.className = 'photo-card';
+            card.onclick = () => openModal(photo.file);
+
+            const img = document.createElement('img');
+            img.className = 'photo-image';
+            img.src = `/static/photos/${photo.file}`;
+            img.alt = photo.file;
+            img.onerror = function() {
+                this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23e2e8f0" width="400" height="300"/%3E%3Ctext x="200" y="155" text-anchor="middle" fill="%2364748b" font-size="14"%3EPhoto%3C/text%3E%3C/svg%3E';
+            };
+
+            const info = document.createElement('div');
+            info.className = 'photo-info';
+
+            const date = document.createElement('div');
+            date.className = 'photo-date';
+            date.textContent = formatDate(photo.date) || 'Date unknown';
+
+            const people = document.createElement('div');
+            people.className = 'photo-people';
+
+            if (photo.face_details && photo.face_details.length > 0) {
+                const namedPeople = photo.face_details
+                    .map(face => face.name)
+                    .filter(name => name);
+                
+                if (namedPeople.length > 0) {
+                    const uniqueNames = [...new Set(namedPeople)];
+                    uniqueNames.slice(0, 5).forEach(name => {
+                        const tag = document.createElement('span');
+                        tag.className = 'person-tag';
+                        tag.textContent = name;
+                        people.appendChild(tag);
+                    });
+
+                    if (uniqueNames.length > 5) {
+                        const tag = document.createElement('span');
+                        tag.className = 'person-tag';
+                        tag.textContent = `+${uniqueNames.length - 5} more`;
+                        people.appendChild(tag);
+                    }
+                }
+            }
+
+            info.appendChild(date);
+            if (people.children.length > 0) {
+                info.appendChild(people);
+            }
+
+            card.appendChild(img);
+            card.appendChild(info);
+
+            return card;
+        }
+
+        // Format date string
+        function formatDate(dateStr) {
+            if (!dateStr) return null;
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            } catch (e) {
+                return dateStr;
+            }
+        }
+
+        // Open modal with full-size image
+        function openModal(filename) {
+            const modal = document.getElementById('modal');
+            const modalImg = document.getElementById('modal-image');
+            modal.classList.add('active');
+            modalImg.src = `/static/photos/${filename}`;
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal on click outside image
+        document.getElementById('modal').onclick = function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        };
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Load gallery on page load
+        document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>
