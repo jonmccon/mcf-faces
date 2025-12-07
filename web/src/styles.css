@@ -87,10 +87,6 @@ body {
   border-color: var(--primary-color);
 }
 
-.nav-btn-primary {
-  /* Primary navigation buttons */
-}
-
 .nav-btn-admin {
   margin-left: 8px;
   border-color: var(--secondary-color);

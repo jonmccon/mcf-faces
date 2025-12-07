@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import * as api from '../api';
 
+// Constants
+const FALLBACK_DATE_MAX = '9999-12-31'; // For sorting unknown dates to the end
+const FALLBACK_SVG = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f1f5f9" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="%2394a3b8" font-family="sans-serif" font-size="16">Photo unavailable</text></svg>';
+
 /**
  * SimplifiedGalleryView - A minimal, clean gallery interface
  * 
@@ -50,8 +54,8 @@ function SimplifiedGalleryView({ onPhotoClick }) {
         });
       case 'date-asc':
         return sorted.sort((a, b) => {
-          const dateA = a.date || '9999-99-99';
-          const dateB = b.date || '9999-99-99';
+          const dateA = a.date || FALLBACK_DATE_MAX;
+          const dateB = b.date || FALLBACK_DATE_MAX;
           return dateA.localeCompare(dateB);
         });
       case 'name':
@@ -119,7 +123,7 @@ function SimplifiedGalleryView({ onPhotoClick }) {
                 className="simplified-gallery-image"
                 loading="lazy"
                 onError={(e) => {
-                  e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f1f5f9" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="%2394a3b8" font-family="sans-serif" font-size="16">Photo unavailable</text></svg>';
+                  e.target.src = FALLBACK_SVG;
                 }}
               />
               {/* Optional: Date overlay (minimal) */}
