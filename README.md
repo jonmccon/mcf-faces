@@ -157,6 +157,18 @@ npm run dev
 
 The UI will be available at `http://localhost:3000`.
 
+#### Simplified Gallery View
+
+For a lightweight, read-only gallery view, you can access the simplified gallery at `http://localhost:3000/gallery.html`. This standalone HTML page provides:
+
+- Clean, minimal photo grid interface
+- No authentication or admin features required
+- Perfect for public sharing or embedding
+- Responsive design for all devices
+- Click photos to view full-size
+
+See [web/GALLERY.md](web/GALLERY.md) for more details.
+
 ### 5. Label Faces
 
 1. Open the web UI
