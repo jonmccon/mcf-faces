@@ -58,6 +58,13 @@ body {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.nav-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .nav-btn {
@@ -78,6 +85,11 @@ body {
   background: var(--primary-color);
   color: white;
   border-color: var(--primary-color);
+}
+
+.nav-btn-admin {
+  margin-left: 8px;
+  border-color: var(--secondary-color);
 }
 
 /* Stats Grid */
@@ -1095,6 +1107,154 @@ body {
   white-space: nowrap;
 }
 
+/* Simplified Gallery View */
+.simplified-gallery {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.simplified-gallery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.simplified-gallery-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.simplified-gallery-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.simplified-sort-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.simplified-sort-select {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.simplified-sort-select:hover {
+  border-color: var(--primary-color);
+}
+
+.simplified-sort-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.simplified-gallery-info {
+  margin-bottom: 20px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.simplified-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.simplified-gallery-item {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: var(--surface);
+}
+
+.simplified-gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.simplified-gallery-image {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+
+.simplified-gallery-date-tag {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+.simplified-gallery-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.simplified-gallery-loading p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.simplified-gallery-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 40px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 2px dashed var(--border-color);
+}
+
+.simplified-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.simplified-gallery-empty h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.simplified-gallery-empty p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
 /* Responsive adjustments for gallery views */
 @media (max-width: 768px) {
   .gallery-grid {
@@ -1113,5 +1273,36 @@ body {
   
   .memories-header h2 {
     font-size: 1.5rem;
+  }
+  
+  .simplified-gallery-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .simplified-gallery-title {
+    font-size: 1.5rem;
+  }
+  
+  .simplified-gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .simplified-gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+  
+  .simplified-gallery-item {
+    border-radius: 4px;
+  }
+  
+  .simplified-gallery-date-tag {
+    font-size: 0.625rem;
+    padding: 3px 8px;
   }
 }

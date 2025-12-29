@@ -9,6 +9,7 @@ import FamilyTreeView from './components/FamilyTreeView';
 import GalleryView from './components/GalleryView';
 import PersonGalleryView from './components/PersonGalleryView';
 import MemoriesView from './components/MemoriesView';
+import SimplifiedGalleryView from './components/SimplifiedGalleryView';
 import FaceModal from './components/FaceModal';
 import PhotoModal from './components/PhotoModal';
 
@@ -65,6 +66,8 @@ function App() {
       // Public gallery views
       case 'gallery':
         return <GalleryView onFaceClick={handleFaceClick} onPhotoClick={handlePhotoClick} />;
+      case 'simple-gallery':
+        return <SimplifiedGalleryView onPhotoClick={handlePhotoClick} />;
       case 'person-gallery':
         return <PersonGalleryView onFaceClick={handleFaceClick} onPhotoClick={handlePhotoClick} />;
       case 'memories':
@@ -109,6 +112,12 @@ function App() {
               onClick={() => setView('gallery')}
             >
               📷 Gallery
+            </button>
+            <button 
+              className={`nav-btn nav-btn-primary ${view === 'simple-gallery' ? 'active' : ''}`}
+              onClick={() => setView('simple-gallery')}
+            >
+              🖼️ Simple
             </button>
             <button 
               className={`nav-btn nav-btn-primary ${view === 'person-gallery' ? 'active' : ''}`}
