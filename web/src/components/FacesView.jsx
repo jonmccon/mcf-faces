@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import * as api from '../api';
+import FaceCard from './FaceCard';
+import Toast from './Toast';
 
-function FacesView({ onFaceClick, onPhotoClick }) {
+function FacesView({ onFaceClick }) {
   const [faces, setFaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     name: '',
     start_date: '',
-    end_date: ''
+    end_date: '',
+    unrecognized: false
   });
   const [people, setPeople] = useState([]);
   const [pagination, setPagination] = useState({
@@ -16,6 +19,7 @@ function FacesView({ onFaceClick, onPhotoClick }) {
     offset: 0,
     limit: 50
   });
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     loadPeople();
@@ -43,9 +47,11 @@ function FacesView({ onFaceClick, onPhotoClick }) {
         offset: pagination.offset
       };
       
-      // Remove empty values
+      // Remove empty values and false unrecognized filter
       Object.keys(params).forEach(key => {
-        if (!params[key]) delete params[key];
+        if (params[key] === '' || (key === 'unrecognized' && params[key] === false)) {
+          delete params[key];
+        }
       });
 
       const data = await api.listFaces(params);
@@ -69,6 +75,109 @@ function FacesView({ onFaceClick, onPhotoClick }) {
 
   const handlePageChange = (newOffset) => {
     setPagination(prev => ({ ...prev, offset: newOffset }));
+  };
+
+  const handleFaceUpdate = async (faceId, newName) => {
+    const oldFace = faces.find(f => f.face_id === faceId);
+    
+    // Optimistic update
+    setFaces(prev => prev.map(f => 
+      f.face_id === faceId ? {...f, name: newName} : f
+    ));
+    
+    try {
+      await api.updateFaceIdentity(faceId, newName);
+      
+      // Reload people list
+      loadPeople();
+      
+      // Show success toast with undo
+      setToast({
+        message: 'Face identity updated!',
+        type: 'success',
+        undoData: { type: 'update', face: oldFace }
+      });
+      
+    } catch (err) {
+      // Rollback on error
+      setFaces(prev => prev.map(f => 
+        f.face_id === faceId ? oldFace : f
+      ));
+      setToast({ 
+        message: `Failed to update: ${err.message}`, 
+        type: 'error' 
+      });
+    }
+  };
+
+  const handleFaceDelete = async (faceId) => {
+    const oldFace = faces.find(f => f.face_id === faceId);
+    
+    // Optimistic update
+    setFaces(prev => prev.map(f => 
+      f.face_id === faceId ? {...f, name: null} : f
+    ));
+    
+    try {
+      await api.removeFaceIdentity(faceId);
+      
+      // Reload people list
+      loadPeople();
+      
+      // Show success toast with undo
+      setToast({
+        message: 'Face identity removed!',
+        type: 'success',
+        undoData: { type: 'delete', face: oldFace }
+      });
+      
+    } catch (err) {
+      // Rollback on error
+      setFaces(prev => prev.map(f => 
+        f.face_id === faceId ? oldFace : f
+      ));
+      setToast({ 
+        message: `Failed to remove: ${err.message}`, 
+        type: 'error' 
+      });
+    }
+  };
+
+  const handleUndo = async () => {
+    if (!toast?.undoData) return;
+    
+    const undoData = toast.undoData;
+    const face = undoData.face;
+    
+    try {
+      if (undoData.type === 'update' || undoData.type === 'delete') {
+        // Restore the original face data
+        if (face.name) {
+          await api.updateFaceIdentity(face.face_id, face.name);
+        } else {
+          await api.removeFaceIdentity(face.face_id);
+        }
+        
+        // Update local state
+        setFaces(prev => prev.map(f => 
+          f.face_id === face.face_id ? face : f
+        ));
+        
+        // Reload people list
+        loadPeople();
+        
+        setToast({ message: 'Change undone', type: 'info' });
+      }
+    } catch (err) {
+      setToast({ 
+        message: `Failed to undo: ${err.message}`, 
+        type: 'error' 
+      });
+    }
+  };
+
+  const handleCloseToast = () => {
+    setToast(null);
   };
 
   const totalPages = Math.ceil(pagination.total / pagination.limit);
@@ -115,6 +224,16 @@ function FacesView({ onFaceClick, onPhotoClick }) {
             onChange={(e) => handleFilterChange('end_date', e.target.value)}
           />
         </div>
+        <div className="form-group">
+          <label className="filter-toggle">
+            <input
+              type="checkbox"
+              checked={filters.unrecognized}
+              onChange={(e) => handleFilterChange('unrecognized', e.target.checked)}
+            />
+            <span>Show only unrecognized</span>
+          </label>
+        </div>
       </div>
 
       {error && <div className="error">{error}</div>}
@@ -136,23 +255,14 @@ function FacesView({ onFaceClick, onPhotoClick }) {
             <div className="card-body">
               <div className="faces-grid">
                 {faces.map(face => (
-                  <div 
+                  <FaceCard
                     key={face.face_id}
-                    className="face-card"
-                    onClick={() => onFaceClick(face)}
-                  >
-                    <img 
-                      src={api.getFaceThumbnailUrl(face.thumbnail)}
-                      alt={face.name || 'Unknown'}
-                      onError={(e) => {
-                        e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23e2e8f0" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%2364748b" font-size="12">No image</text></svg>';
-                      }}
-                    />
-                    <div className="face-info">
-                      <div className="face-name">{face.name || `Cluster ${face.person_cluster}`}</div>
-                      <div className="face-date">{face.date || 'Unknown date'}</div>
-                    </div>
-                  </div>
+                    face={face}
+                    people={people}
+                    onUpdate={handleFaceUpdate}
+                    onDelete={handleFaceDelete}
+                    onClick={onFaceClick}
+                  />
                 ))}
               </div>
             </div>
@@ -177,6 +287,16 @@ function FacesView({ onFaceClick, onPhotoClick }) {
             </div>
           )}
         </>
+      )}
+      
+      {/* Toast notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onUndo={toast.undoData ? handleUndo : null}
+          onClose={handleCloseToast}
+        />
       )}
     </div>
   );

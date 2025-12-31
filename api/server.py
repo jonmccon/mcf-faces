@@ -35,6 +35,9 @@ from utils import (
     get_unique_people,
     get_faces_by_person,
     get_photos_by_date_range,
+    update_face_name,
+    remove_face_name,
+    get_face_suggestions,
 )
 from update_metadata import (
     update_cluster_name,
@@ -69,6 +72,10 @@ if PHOTOS_DIR.exists():
 
 # Pydantic models for request/response
 class NameUpdateRequest(BaseModel):
+    name: str
+
+
+class FaceIdentityRequest(BaseModel):
     name: str
 
 
@@ -124,6 +131,7 @@ async def list_faces(
     cluster_id: Optional[int] = None,
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
+    unrecognized: Optional[bool] = None,
     limit: int = Query(default=100, le=1000),
     offset: int = Query(default=0, ge=0)
 ):
@@ -135,6 +143,7 @@ async def list_faces(
     - cluster_id: Filter by cluster ID
     - start_date: Filter by date (ISO format)
     - end_date: Filter by date (ISO format)
+    - unrecognized: Filter by recognition status (true for unrecognized faces)
     - limit: Maximum number of results
     - offset: Offset for pagination
     """
@@ -147,6 +156,14 @@ async def list_faces(
     
     if cluster_id is not None:
         faces = [f for f in faces if f.get("person_cluster") == cluster_id]
+    
+    if unrecognized is not None:
+        if unrecognized:
+            # Faces without a name or with None/empty name
+            faces = [f for f in faces if not f.get("name")]
+        else:
+            # Faces with a name
+            faces = [f for f in faces if f.get("name")]
     
     if start_date:
         faces = [f for f in faces if f.get("date", "") >= start_date]
@@ -194,6 +211,53 @@ async def get_faces_by_name(name: str):
         "name": name,
         "count": len(faces),
         "faces": faces
+    }
+
+
+@app.patch("/faces/{face_id}/identity")
+async def update_face_identity(face_id: str, request: FaceIdentityRequest):
+    """
+    Update or assign a person's name to a face.
+    Used for both new assignments and corrections.
+    """
+    try:
+        result = update_face_name(face_id, request.name)
+        return {
+            **result,
+            "status": "updated"
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@app.delete("/faces/{face_id}/identity")
+async def remove_face_identity(face_id: str):
+    """
+    Remove the name assignment from a face.
+    Resets it to unrecognized state.
+    """
+    try:
+        result = remove_face_name(face_id)
+        return {
+            **result,
+            "status": "removed"
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@app.get("/faces/{face_id}/suggestions")
+async def get_face_suggestions_endpoint(face_id: str):
+    """
+    Get suggested people for this face based on:
+    - Other faces in the same photo
+    - Recently assigned names
+    - Faces from similar time periods
+    """
+    suggestions = get_face_suggestions(face_id)
+    return {
+        "face_id": face_id,
+        "suggestions": suggestions
     }
 
 
