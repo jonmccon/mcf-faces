@@ -57,6 +57,7 @@ export async function listFaces(params = {}) {
   if (params.cluster_id !== undefined) query.set('cluster_id', params.cluster_id);
   if (params.start_date) query.set('start_date', params.start_date);
   if (params.end_date) query.set('end_date', params.end_date);
+  if (params.unrecognized !== undefined) query.set('unrecognized', params.unrecognized);
   if (params.limit) query.set('limit', params.limit);
   if (params.offset) query.set('offset', params.offset);
   
@@ -80,6 +81,39 @@ export async function getFace(faceId) {
  */
 export async function getFacesByName(name) {
   return apiRequest(`/faces/by_name/${encodeURIComponent(name)}`);
+}
+
+/**
+ * Update face identity/name assignment
+ * @param {string} faceId - Face ID
+ * @param {string} name - Name to assign to the face
+ * @returns {Promise<object>} Update result
+ */
+export async function updateFaceIdentity(faceId, name) {
+  return apiRequest(`/faces/${encodeURIComponent(faceId)}/identity`, {
+    method: 'PATCH',
+    body: JSON.stringify({ name }),
+  });
+}
+
+/**
+ * Remove face identity
+ * @param {string} faceId - Face ID
+ * @returns {Promise<object>} Remove result
+ */
+export async function removeFaceIdentity(faceId) {
+  return apiRequest(`/faces/${encodeURIComponent(faceId)}/identity`, {
+    method: 'DELETE',
+  });
+}
+
+/**
+ * Get suggested people for a face
+ * @param {string} faceId - Face ID
+ * @returns {Promise<object>} Suggestions response
+ */
+export async function getFaceSuggestions(faceId) {
+  return apiRequest(`/faces/${encodeURIComponent(faceId)}/suggestions`);
 }
 
 // ============================================================================

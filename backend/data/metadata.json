@@ -424,7 +424,7 @@
       "face_id": "PXL_20251027_025508026_face0",
       "photo": "PXL_20251027_025508026.jpg",
       "person_cluster": -1,
-      "name": "",
+      "name": null,
       "bbox": [
         620,
         3472,

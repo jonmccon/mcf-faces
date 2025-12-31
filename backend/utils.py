@@ -158,3 +158,76 @@ def get_photos_by_date_range(
         filtered.append(photo)
     
     return sorted(filtered, key=lambda p: p.get("date", ""))
+
+
+def update_face_name(face_id: str, new_name: str) -> Dict[str, Any]:
+    """Update the name for a specific face."""
+    metadata = load_metadata()
+    
+    for face in metadata.get("faces", []):
+        if face["face_id"] == face_id:
+            old_name = face.get("name")
+            face["name"] = new_name
+            save_metadata(metadata)
+            
+            return {
+                "face_id": face_id,
+                "name": new_name,
+                "previous_name": old_name
+            }
+    
+    raise ValueError(f"Face {face_id} not found")
+
+
+def remove_face_name(face_id: str) -> Dict[str, Any]:
+    """Remove the name from a face."""
+    metadata = load_metadata()
+    
+    for face in metadata.get("faces", []):
+        if face["face_id"] == face_id:
+            old_name = face.get("name")
+            face["name"] = None
+            save_metadata(metadata)
+            
+            return {"face_id": face_id, "previous_name": old_name}
+    
+    raise ValueError(f"Face {face_id} not found")
+
+
+def get_face_suggestions(face_id: str) -> List[Dict[str, str]]:
+    """Get suggested people for a face based on context."""
+    metadata = load_metadata()
+    
+    # Find the face and its photo
+    target_face = None
+    for face in metadata.get("faces", []):
+        if face["face_id"] == face_id:
+            target_face = face
+            break
+    
+    if not target_face:
+        return []
+    
+    suggestions = []
+    
+    # Find other people in the same photo
+    for photo in metadata.get("photos", []):
+        if face_id in photo.get("faces", []):
+            for other_face_id in photo["faces"]:
+                if other_face_id != face_id:
+                    for face in metadata["faces"]:
+                        if face["face_id"] == other_face_id and face.get("name"):
+                            suggestions.append({
+                                "name": face["name"],
+                                "reason": "appears_in_same_photo"
+                            })
+    
+    # Deduplicate by name
+    seen = set()
+    unique_suggestions = []
+    for s in suggestions:
+        if s["name"] not in seen:
+            seen.add(s["name"])
+            unique_suggestions.append(s)
+    
+    return unique_suggestions[:5]  # Top 5
