@@ -48,14 +48,10 @@ function FacesView({ onFaceClick, onPhotoClick }) {
         offset: pagination.offset
       };
       
-      // Remove empty values
+      // Remove empty values and false unrecognized filter
       Object.keys(params).forEach(key => {
-        if (params[key] === '' || params[key] === false) {
-          if (key === 'unrecognized' && params[key] === false) {
-            delete params[key];
-          } else if (params[key] === '') {
-            delete params[key];
-          }
+        if (params[key] === '' || (key === 'unrecognized' && params[key] === false)) {
+          delete params[key];
         }
       });
 

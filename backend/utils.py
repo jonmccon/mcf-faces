@@ -194,7 +194,7 @@ def remove_face_name(face_id: str) -> Dict[str, Any]:
     raise ValueError(f"Face {face_id} not found")
 
 
-def get_face_suggestions(face_id: str) -> List[Dict[str, str]]:
+def get_face_suggestions(face_id: str) -> List[Dict[str, Any]]:
     """Get suggested people for a face based on context."""
     metadata = load_metadata()
     

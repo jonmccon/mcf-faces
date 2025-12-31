@@ -1338,12 +1338,12 @@ body {
 }
 
 .face-card.matched .status-badge {
-  background: #10b981;
+  background: var(--success-color);
   color: white;
 }
 
 .face-card.unrecognized .status-badge {
-  background: #f59e0b;
+  background: var(--warning-color);
   color: white;
 }
 
@@ -1414,15 +1414,15 @@ body {
 }
 
 .toast-success {
-  background: #10b981;
+  background: var(--success-color);
 }
 
 .toast-error {
-  background: #ef4444;
+  background: var(--error-color);
 }
 
 .toast-info {
-  background: #3b82f6;
+  background: var(--primary-color);
 }
 
 @keyframes slideIn {
