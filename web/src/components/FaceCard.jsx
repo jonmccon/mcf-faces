@@ -16,7 +16,6 @@ import FaceIdentityEditor from './FaceIdentityEditor';
 function FaceCard({ face, people = [], onUpdate, onDelete, onClick }) {
   const [isEditing, setIsEditing] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   
   const isRecognized = face.name && face.name.trim() !== '';
   const displayName = isRecognized ? face.name : 'Unknown';
@@ -26,15 +25,12 @@ function FaceCard({ face, people = [], onUpdate, onDelete, onClick }) {
     setIsEditing(true);
     
     // Load suggestions
-    setLoadingSuggestions(true);
     try {
       const result = await api.getFaceSuggestions(face.face_id);
       setSuggestions(result.suggestions || []);
     } catch (err) {
       console.error('Failed to load suggestions:', err);
       setSuggestions([]);
-    } finally {
-      setLoadingSuggestions(false);
     }
   };
   

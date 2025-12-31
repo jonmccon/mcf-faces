@@ -3,7 +3,7 @@ import * as api from '../api';
 import FaceCard from './FaceCard';
 import Toast from './Toast';
 
-function FacesView({ onFaceClick, onPhotoClick }) {
+function FacesView({ onFaceClick }) {
   const [faces, setFaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +20,6 @@ function FacesView({ onFaceClick, onPhotoClick }) {
     limit: 50
   });
   const [toast, setToast] = useState(null);
-  const [undoStack, setUndoStack] = useState([]);
 
   useEffect(() => {
     loadPeople();
@@ -99,9 +98,6 @@ function FacesView({ onFaceClick, onPhotoClick }) {
         undoData: { type: 'update', face: oldFace }
       });
       
-      // Add to undo stack
-      setUndoStack(prev => [...prev.slice(-4), { type: 'update', face: oldFace }]);
-      
     } catch (err) {
       // Rollback on error
       setFaces(prev => prev.map(f => 
@@ -134,9 +130,6 @@ function FacesView({ onFaceClick, onPhotoClick }) {
         type: 'success',
         undoData: { type: 'delete', face: oldFace }
       });
-      
-      // Add to undo stack
-      setUndoStack(prev => [...prev.slice(-4), { type: 'delete', face: oldFace }]);
       
     } catch (err) {
       // Rollback on error
