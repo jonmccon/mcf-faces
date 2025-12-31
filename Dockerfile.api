@@ -17,6 +17,11 @@ COPY backend/ /app/backend/
 COPY api/ /app/api/
 
 # Install Python dependencies
+# NOTE: --trusted-host flags are included to bypass SSL certificate verification issues
+# that may occur in certain CI/CD environments with self-signed certificates.
+# In production, these flags can be removed if SSL verification works properly.
+# For maximum security, consider using a requirements.txt with pinned versions:
+# pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
     opencv-python-headless \
     face_recognition \

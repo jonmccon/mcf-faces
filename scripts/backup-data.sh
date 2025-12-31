@@ -10,10 +10,13 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Volume names
-PHOTOS_VOLUME="mcf-faces_photos_data"
-FACES_VOLUME="mcf-faces_faces_data"
-METADATA_VOLUME="mcf-faces_metadata"
+# Detect Docker Compose project name (defaults to directory name)
+PROJECT_NAME="${COMPOSE_PROJECT_NAME:-mcf-faces}"
+
+# Volume names (with Docker Compose prefix)
+PHOTOS_VOLUME="${PROJECT_NAME}_photos_data"
+FACES_VOLUME="${PROJECT_NAME}_faces_data"
+METADATA_VOLUME="${PROJECT_NAME}_metadata"
 
 BACKUP_DIR="${1:-./backups}"
 DATE=$(date +%Y%m%d_%H%M%S)
@@ -22,6 +25,7 @@ DATE=$(date +%Y%m%d_%H%M%S)
 mkdir -p "$BACKUP_DIR"
 
 echo -e "${GREEN}Starting backup process...${NC}"
+echo "Project: $PROJECT_NAME"
 echo "Backup directory: $BACKUP_DIR"
 echo "Timestamp: $DATE"
 echo ""
@@ -30,6 +34,8 @@ echo ""
 if ! docker volume inspect "$PHOTOS_VOLUME" >/dev/null 2>&1; then
   echo -e "${RED}Error: Volume '$PHOTOS_VOLUME' not found${NC}"
   echo "Is the application running?"
+  echo "Available volumes:"
+  docker volume ls | grep "$PROJECT_NAME" || echo "  None found with project name: $PROJECT_NAME"
   exit 1
 fi
 

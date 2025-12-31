@@ -9,14 +9,12 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Persistent storage for photos
-      - photos_data:/app/backend/data/photos
-      # Persistent storage for cropped faces
-      - faces_data:/app/backend/data/faces
-      # Persistent storage for metadata and other data files (embeddings.npy, *.json)
-      # Note: This volume includes the parent data directory. The photos and faces
-      # subdirectories above will be layered on top as separate volumes.
+      # IMPORTANT: Mount order matters! Parent directory first, then subdirectories.
+      # The metadata volume contains the parent data directory with JSON files and embeddings.npy
       - metadata:/app/backend/data
+      # Photos and faces subdirectories are mounted as separate volumes on top
+      - photos_data:/app/backend/data/photos
+      - faces_data:/app/backend/data/faces
     environment:
       - PORT=8000
       - PYTHONUNBUFFERED=1

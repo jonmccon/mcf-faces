@@ -68,9 +68,20 @@ else
   echo -e "${GREEN}Uploading photos to remote server $REMOTE_HOST...${NC}"
   
   # Detect deployment path on remote server
-  DEPLOY_PATH=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls --format json 2>/dev/null | grep mcf-faces | head -1" 2>/dev/null | grep -o '"ConfigFiles":"[^"]*"' | cut -d'"' -f4 | head -1 | xargs dirname 2>/dev/null)
+  # First try to detect via docker compose ls
+  DEPLOY_PATH=""
+  if command -v jq &> /dev/null; then
+    # Use jq for robust JSON parsing if available
+    DEPLOY_PATH=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls --format json 2>/dev/null | jq -r '.[] | select(.Name == \"mcf-faces\") | .ConfigFiles' | head -1" 2>/dev/null | xargs dirname 2>/dev/null)
+  else
+    # Fallback to grep-based parsing
+    CONFIG_FILE=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls 2>/dev/null | grep mcf-faces | awk '{print \$NF}'" 2>/dev/null)
+    if [ -n "$CONFIG_FILE" ]; then
+      DEPLOY_PATH=$(dirname "$CONFIG_FILE")
+    fi
+  fi
   
-  if [ -z "$DEPLOY_PATH" ]; then
+  if [ -z "$DEPLOY_PATH" ] || [ "$DEPLOY_PATH" = "." ]; then
     echo -e "${YELLOW}Warning: Could not auto-detect deployment path${NC}"
     DEPLOY_PATH="${REMOTE_DEPLOY_PATH:-/root/mcf-faces}"
     echo -e "${YELLOW}Using default: $DEPLOY_PATH${NC}"
