@@ -52,15 +52,38 @@ family-photos-face-recognition/
 └── README.md
 ```
 
-## Installation
+## Deployment
 
-### Prerequisites
+### Docker Quick Start (Recommended)
+
+The easiest way to get started is using Docker:
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/mcf-faces.git
+cd mcf-faces
+
+# Build and start all services
+docker-compose up -d
+
+# Access the application
+# Web UI: http://localhost:3000
+# API: http://localhost:8000
+```
+
+For production deployment, VPS setup, SSL configuration, and advanced topics, see our comprehensive [Deployment Guide](docs/DEPLOYMENT.md).
+
+### Manual Installation
+
+If you prefer to run without Docker:
+
+#### Prerequisites
 
 - Python 3.8+
 - Node.js 18+
 - CMake (for dlib compilation)
 
-### Backend Setup
+#### Backend Setup
 
 ** don't use a venv on a devcontainer **
 1. Create a virtual environment:
@@ -79,7 +102,7 @@ family-photos-face-recognition/
 
    Note: `face_recognition` requires `dlib`, which may need CMake and a C++ compiler to build.
 
-### Frontend Setup
+#### Frontend Setup
 
 1. Install Node.js dependencies:
    ```bash

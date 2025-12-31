@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # API Service - Python FastAPI backend with face recognition
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: mcf-faces-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persistent storage for photos
+      - photos_data:/app/backend/data/photos
+      # Persistent storage for cropped faces
+      - faces_data:/app/backend/data/faces
+      # Persistent storage for metadata and other data files
+      - metadata:/app/backend/data
+    environment:
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+    networks:
+      - mcf-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/stats')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Web Service - React frontend with Nginx
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: mcf-faces-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - mcf-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Nginx Reverse Proxy (optional, for production)
+  # Uncomment to use production reverse proxy with SSL/TLS support
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: mcf-faces-nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx-prod.conf:/etc/nginx/conf.d/default.conf:ro
+  #     # Mount SSL certificates directory (create this directory and add your certs)
+  #     # - ./certs:/etc/nginx/certs:ro
+  #   depends_on:
+  #     - api
+  #     - web
+  #   networks:
+  #     - mcf-network
+
+# Named volumes for persistent data storage
+volumes:
+  photos_data:
+    driver: local
+  faces_data:
+    driver: local
+  metadata:
+    driver: local
+
+# Network for inter-container communication
+networks:
+  mcf-network:
+    driver: bridge
