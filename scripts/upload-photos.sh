@@ -78,8 +78,8 @@ else
   else
     # Fallback to grep-based parsing
     CONFIG_FILE=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls 2>/dev/null | grep -w mcf-faces | awk '{print \$NF}'" 2>/dev/null)
-    if [ -n "$CONFIG_FILE" ]; then
-      DEPLOY_PATH=$(dirname "$CONFIG_FILE" 2>/dev/null)
+    if [ -n "$CONFIG_FILE" ] && [ "$CONFIG_FILE" != "/" ]; then
+      DEPLOY_PATH=$(dirname "$CONFIG_FILE" 2>/dev/null) || DEPLOY_PATH=""
     fi
   fi
   

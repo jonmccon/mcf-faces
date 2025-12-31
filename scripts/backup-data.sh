@@ -25,7 +25,11 @@ DATE=$(date +%Y%m%d_%H%M%S)
 mkdir -p "$BACKUP_DIR"
 
 # Get absolute path after directory is created
-BACKUP_DIR_ABS=$(cd "$BACKUP_DIR" && pwd)
+BACKUP_DIR_ABS=$(cd "$BACKUP_DIR" && pwd 2>/dev/null)
+if [ -z "$BACKUP_DIR_ABS" ]; then
+  echo -e "${RED}Error: Cannot access backup directory '$BACKUP_DIR'${NC}"
+  exit 1
+fi
 
 echo -e "${GREEN}Starting backup process...${NC}"
 echo "Project: $PROJECT_NAME"
