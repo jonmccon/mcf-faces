@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # API Service - Python FastAPI backend with face recognition
   api:
