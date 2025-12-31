@@ -1,0 +1,77 @@
+# Git
+.git
+.gitignore
+
+# Documentation (except in docs/)
+*.md
+!docs/*.md
+README.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+.env
+*.test.py
+__tests__/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Node
+node_modules/
+web/dist/
+web/package-lock.json
+.npm
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Data files (these will be mounted as volumes)
+backend/data/faces/*.jpg
+backend/data/faces/*.jpeg
+backend/data/faces/*.png
+backend/data/photos/*
+backend/data/embeddings.npy
+
+# Temporary files
+tmp/
+temp/
+*.tmp
