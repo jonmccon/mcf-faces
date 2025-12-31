@@ -67,6 +67,16 @@ else
   # Remote deployment
   echo -e "${GREEN}Uploading photos to remote server $REMOTE_HOST...${NC}"
   
+  # Detect deployment path on remote server
+  DEPLOY_PATH=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls --format json 2>/dev/null | grep mcf-faces | head -1" 2>/dev/null | grep -o '"ConfigFiles":"[^"]*"' | cut -d'"' -f4 | head -1 | xargs dirname 2>/dev/null)
+  
+  if [ -z "$DEPLOY_PATH" ]; then
+    echo -e "${YELLOW}Warning: Could not auto-detect deployment path${NC}"
+    DEPLOY_PATH="${REMOTE_DEPLOY_PATH:-/root/mcf-faces}"
+    echo -e "${YELLOW}Using default: $DEPLOY_PATH${NC}"
+    echo "Set REMOTE_DEPLOY_PATH environment variable to override"
+  fi
+  
   # First, get the volume path from remote server
   VOLUME_PATH=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker volume inspect mcf-faces_photos_data --format '{{ .Mountpoint }}' 2>/dev/null")
   
@@ -83,8 +93,8 @@ else
   echo -e "${GREEN}Triggering processing on remote server...${NC}"
   
   # Trigger incremental processing on remote server
-  ssh "$REMOTE_USER@$REMOTE_HOST" "cd /path/to/mcf-faces && docker-compose exec -T api python backend/process_photos.py --incremental"
+  ssh "$REMOTE_USER@$REMOTE_HOST" "cd $DEPLOY_PATH && docker compose exec -T api python backend/process_photos.py --incremental"
   
   echo -e "${GREEN}Processing complete!${NC}"
-  echo "Check logs with: ssh $REMOTE_USER@$REMOTE_HOST 'cd /path/to/mcf-faces && docker-compose logs -f api'"
+  echo "Check logs with: ssh $REMOTE_USER@$REMOTE_HOST 'cd $DEPLOY_PATH && docker compose logs -f api'"
 fi

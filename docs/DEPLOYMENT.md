@@ -694,7 +694,27 @@ docker-compose up -d
 
 ```bash
 # If data was corrupted, restore from backup
-./scripts/restore-backup.sh /path/to/backup
+# Follow the restore instructions shown at the end of backup-data.sh output
+# Or manually restore:
+
+# Stop the application
+docker compose down
+
+# Remove old volumes
+docker volume rm mcf-faces_photos_data mcf-faces_faces_data mcf-faces_metadata
+
+# Recreate volumes
+docker volume create mcf-faces_photos_data
+docker volume create mcf-faces_faces_data
+docker volume create mcf-faces_metadata
+
+# Restore data (replace DATE with your backup timestamp)
+docker run --rm -v mcf-faces_photos_data:/data -v ~/backups:/backup alpine tar xzf /backup/photos_DATE.tar.gz -C /data
+docker run --rm -v mcf-faces_faces_data:/data -v ~/backups:/backup alpine tar xzf /backup/faces_DATE.tar.gz -C /data
+docker run --rm -v mcf-faces_metadata:/data -v ~/backups:/backup alpine tar xzf /backup/metadata_DATE.tar.gz -C /data
+
+# Restart application
+docker compose up -d
 ```
 
 ### Zero-Downtime Updates (Advanced)
