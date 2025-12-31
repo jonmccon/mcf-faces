@@ -30,8 +30,8 @@ if [ ! -d "$LOCAL_DIR" ]; then
   exit 1
 fi
 
-# Count photos to upload
-PHOTO_COUNT=$(find "$LOCAL_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.webp" \) | wc -l)
+# Count photos to upload (with safety limits for large directories)
+PHOTO_COUNT=$(find "$LOCAL_DIR" -maxdepth 3 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.webp" \) 2>/dev/null | head -10000 | wc -l)
 if [ "$PHOTO_COUNT" -eq 0 ]; then
   echo -e "${YELLOW}Warning: No photos found in '$LOCAL_DIR'${NC}"
   exit 0
@@ -68,24 +68,29 @@ else
   echo -e "${GREEN}Uploading photos to remote server $REMOTE_HOST...${NC}"
   
   # Detect deployment path on remote server
-  # First try to detect via docker compose ls
   DEPLOY_PATH=""
   if command -v jq &> /dev/null; then
     # Use jq for robust JSON parsing if available
-    DEPLOY_PATH=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls --format json 2>/dev/null | jq -r '.[] | select(.Name == \"mcf-faces\") | .ConfigFiles' | head -1" 2>/dev/null | xargs dirname 2>/dev/null)
+    CONFIG_FILE=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls --format json 2>/dev/null" | jq -r '.[] | select(.Name == "mcf-faces") | .ConfigFiles' 2>/dev/null | head -1)
+    if [ -n "$CONFIG_FILE" ] && [ "$CONFIG_FILE" != "null" ]; then
+      DEPLOY_PATH=$(dirname "$CONFIG_FILE")
+    fi
   else
     # Fallback to grep-based parsing
-    CONFIG_FILE=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls 2>/dev/null | grep mcf-faces | awk '{print \$NF}'" 2>/dev/null)
+    CONFIG_FILE=$(ssh "$REMOTE_USER@$REMOTE_HOST" "docker compose ls 2>/dev/null | grep -w mcf-faces | awk '{print \$NF}'" 2>/dev/null)
     if [ -n "$CONFIG_FILE" ]; then
-      DEPLOY_PATH=$(dirname "$CONFIG_FILE")
+      DEPLOY_PATH=$(dirname "$CONFIG_FILE" 2>/dev/null)
     fi
   fi
   
-  if [ -z "$DEPLOY_PATH" ] || [ "$DEPLOY_PATH" = "." ]; then
-    echo -e "${YELLOW}Warning: Could not auto-detect deployment path${NC}"
+  # Validate detected path
+  if [ -z "$DEPLOY_PATH" ] || [ "$DEPLOY_PATH" = "." ] || [ "$DEPLOY_PATH" = "/" ]; then
+    echo -e "${YELLOW}Warning: Could not auto-detect deployment path or path is invalid${NC}"
     DEPLOY_PATH="${REMOTE_DEPLOY_PATH:-/root/mcf-faces}"
     echo -e "${YELLOW}Using default: $DEPLOY_PATH${NC}"
     echo "Set REMOTE_DEPLOY_PATH environment variable to override"
+  else
+    echo "Detected deployment path: $DEPLOY_PATH"
   fi
   
   # First, get the volume path from remote server
